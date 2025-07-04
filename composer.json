@@ -1,0 +1,25 @@
+{
+  "name": "khairy/migration-model-sync",
+  "description": "Automatically sync Laravel models from migration files, including fillable, casts, and relationships.",
+  "type": "library",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "Khairy\\MigrationModelSync\\": "src/"
+    }
+  },
+  "require": {
+    "php": ">=8.0",
+    "illuminate/support": "^8.0|^9.0|^10.0|^11.0|^12.0",
+    "nikic/php-parser": "^4.13 || ^5.0"
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Khairy\\MigrationModelSync\\MigrationModelSyncServiceProvider"
+      ]
+    }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
+}
