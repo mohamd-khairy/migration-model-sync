@@ -16,14 +16,38 @@ class RelationshipGuesser
     public function infer(): array
     {
         $relations = [];
+
+        $overrides = config('modelsync.relationship_overrides', []);
+
         foreach ($this->schema['foreign_keys'] as $column => $target) {
-            $model = Str::studly(Str::singular($target));
+            if (isset($overrides[$column])) {
+                // Parse the override string: 'belongsTo:App\\Models\\Admin@author'
+                [$type, $modelAndMethod] = explode(':', $overrides[$column]);
+                [$model, $method] = explode('@', $modelAndMethod);
+
+                $relations[] = [
+                    'type'        => $type,
+                    'method'      => $method,
+                    'model'       => "\\{$model}",
+                    'foreign_key' => $column,
+                    'owner_key'   => 'id',
+                ];
+                continue;
+            }
+
+            // Default relationship inference
+            $relationName = Str::studly(str_replace('_id', '', $column));
+            $modelName = Str::studly(Str::singular($target));
+
             $relations[] = [
-                'type' => 'belongsTo',
-                'method' => lcfirst($model),
-                'model' => "\\App\\Models\\{$model}"
+                'type'        => 'belongsTo',
+                'method'      => lcfirst($relationName),
+                'model'       => "\\App\\Models\\{$modelName}",
+                'foreign_key' => $column,
+                'owner_key'   => 'id',
             ];
         }
+
         return $relations;
     }
 }

@@ -162,11 +162,12 @@ Pull requests are welcome! Please fork the repo, improve, and submit a PR. For m
 
 ## 📄 License
 
-MIT License © [Khairy](https://github.com/yourname)
+MIT License © [Khairy](https://github.com/mohamd-khair)
 
 ---
 
 ## 🌐 Links
-- GitHub: [github.com/yourname/migration-model-sync](https://github.com/yourname/migration-model-sync)
+- GitHub: [github.com/mohamd-khairy/migration-model-sync](https://github.com/mohamd-khairy/migration-model-sync)
 - Packagist: [packagist.org/packages/khairy/migration-model-sync](https://packagist.org/packages/khairy/migration-model-sync)
 # migration-model-sync
+

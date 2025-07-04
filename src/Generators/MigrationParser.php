@@ -16,24 +16,33 @@ class MigrationParser
 
     public function parse(): array
     {
+        $excludedTables = config('modelsync.exclude_tables', []);
         $table = Str::snake(Str::pluralStudly(class_basename($this->model)));
+
+        // Skip parsing if table is in excluded list
+        if (in_array($table, $excludedTables)) {
+            return [
+                'columns' => [],
+                'foreign_keys' => [],
+            ];
+        }
+
         $migrationPath = database_path('migrations');
 
         $finder = new Finder();
         $finder->files()->in($migrationPath)->name("*create_{$table}_table.php");
 
         foreach ($finder as $file) {
-
             $content = file_get_contents($file->getRealPath());
 
+            // Match column definitions
             preg_match_all('/\$table->(\w+)\([\'"]([^\'"]+)[\'"]\)/', $content, $matches, PREG_SET_ORDER);
-
             $columns = [];
             foreach ($matches as $match) {
-
                 $columns[$match[2]] = $match[1];
             }
 
+            // Match foreign keys
             $foreignKeys = [];
 
             // ->foreignId('user_id')->constrained()
