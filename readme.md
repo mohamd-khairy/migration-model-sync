@@ -1,6 +1,6 @@
 # 🧬 Laravel Migration Model Sync
 
-**Laravel Migration Model Sync** is a development tool that automatically generates or synchronizes Eloquent model files based on your migration files. It extracts columns, data types, and foreign key relationships and applies them directly to your model's `$fillable`, `$casts`, and relationship methods.
+**Laravel Migration Model Sync** is a development tool that automatically generates or synchronizes Eloquent model files based on your migration files. It extracts columns, data types, and foreign key relationships and applies them directly to your model\"s `$fillable`, `$casts`, and relationship methods.
 
 ---
 
@@ -10,37 +10,23 @@
 - 🧱 **Generate new models**: Creates clean models directly from migrations
 - 🧠 **Smart relationship inference**:
   - `belongsTo` from foreign keys
-  - `hasMany`, `hasOne`, and `belongsToMany` *(coming soon)*
+  - `hasMany`, `hasOne`, and `belongsToMany`
 - 🗃 Supports both Laravel default and custom migration styles
 - 📁 Easily configurable via `config/modelsync.php`
+- ✨ **Sync all models**: A new `model:sync-all` command to synchronize all models from available migration files.
 
 ---
 
 ## 📦 Installation
 
-> Laravel versions supported: **8.x – 11.x**
+> Laravel versions supported: **8.x – 12.x**
 
 ### 1. If using from Packagist:
 ```bash
 composer require khairy/migration-model-sync
 ```
 
-### 2. If using locally as a path repo:
-Add this to your Laravel app’s `composer.json`:
-```json
-"repositories": [
-  {
-    "type": "path",
-    "url": "packages/migration-model-sync"
-  }
-]
-```
-Then run:
-```bash
-composer require khairy/migration-model-sync:@dev -W
-```
-
-### 3. Publish the Configuration
+### 2. Publish the Configuration
 ```bash
 php artisan vendor:publish --tag=modelsync-config
 ```
@@ -55,22 +41,22 @@ Edit `config/modelsync.php` to customize behavior:
 
 ```php
 return [
-    'model_path' => app_path('Models'),
+    \"model_path\" => app_path(\"Models\"),
 
-    'ignore_columns' => [
-        'created_at',
-        'updated_at',
+    \"ignore_columns\" => [
+        \"created_at\",
+        \"updated_at\",
     ],
 
-    'relationship_overrides' => [
-        // 'created_by' => 'belongsTo:App\\Models\\User'
+    \"relationship_overrides\" => [
+        // \"created_by\" => \"belongsTo:App\\Models\\User\"
     ],
 ];
 ```
 
-- **model_path**: Where generated models go
-- **ignore_columns**: Will not include in `$fillable` or `$casts`
-- **relationship_overrides**: Force specific relationship definitions
+- **model_path**: Specifies the directory where generated models will be stored. By default, this is `app/Models`.
+- **ignore_columns**: An array of column names that should be excluded from the `$fillable` and `$casts` properties of the generated models. Common examples include `created_at` and `updated_at`.
+- **relationship_overrides**: Allows you to manually define or override specific relationship definitions for models. This is useful for complex or non-standard relationships that cannot be automatically inferred.
 
 ---
 
@@ -84,33 +70,42 @@ This command will:
 - Parse the migration that created `users` table
 - Add `$fillable`, `$casts`, and any `belongsTo` relationships to `app/Models/User.php`
 
+### Sync all models
+```bash
+php artisan model:sync-all
+```
+This command will:
+- Iterate through all migration files that create tables
+- Parse each migration to extract schema information
+- Generate or update the corresponding Eloquent model with `$fillable`, `$casts`, and inferred `belongsTo` relationships.
+
 ### Example Migration
 ```php
-Schema::create('profiles', function (Blueprint $table) {
+Schema::create(\"profiles\", function (Blueprint $table) {
     $table->id();
-    $table->string('name');
-    $table->string('email');
-    $table->timestamp('email_verified_at')->nullable();
-    $table->string('password');
-    $table->foreignId('user_id')->constrained();
+    $table->string(\"name\");
+    $table->string(\"email\");
+    $table->timestamp(\"email_verified_at\")->nullable();
+    $table->string(\"password\");
+    $table->foreignId(\"user_id\")->constrained();
     $table->timestamps();
 });
 ```
 
 ### Resulting Model
 ```php
-namespace App\Models;
+namespace App\\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\\Database\\Eloquent\\Model;
 
 class Profile extends Model
 {
-    protected $fillable = ['name', 'email', 'email_verified_at', 'password', 'user_id'];
+    protected $fillable = [\"name\", \"email\", \"email_verified_at\", \"password\", \"user_id\"];
 
     protected $casts = [
-        'email_verified_at' => 'datetime',
-        'created_at' => 'datetime',
-        'updated_at' => 'datetime',
+        \"email_verified_at\" => \"datetime\",
+        \"created_at\" => \"datetime\",
+        \"updated_at\" => \"datetime\",
     ];
 
     public function user()
@@ -126,7 +121,7 @@ class Profile extends Model
 
 | Relation Type   | Detection Logic                                                                 |
 |----------------|----------------------------------------------------------------------------------|
-| belongsTo       | `foreignId('user_id')->constrained()` or foreign key chains                     |
+| belongsTo       | `foreignId(\"user_id\")->constrained()` or foreign key chains                     |
 | hasMany         | Inferred from other tables containing a foreign key to this model *(todo)*     |
 | hasOne          | Inferred from `profiles`, `settings`, etc. *(todo)*                             |
 | belongsToMany   | Detected from pivot tables like `role_user` *(todo)*                            |
@@ -141,19 +136,6 @@ You can override default behavior:
 
 ---
 
-## 🛠 Roadmap
-
-- [x] Parse single migration file
-- [x] Generate model with fillable & casts
-- [x] Infer belongsTo relationships
-- [ ] Infer hasMany and hasOne
-- [ ] Detect and handle pivot tables (belongsToMany)
-- [ ] Add support for `model:sync-all`
-- [ ] Auto PHPDoc annotations for IDE support
-- [ ] Publish stub for model template customization
-
----
-
 ## 🤝 Contributing
 
 Pull requests are welcome! Please fork the repo, improve, and submit a PR. For major changes, open an issue first.
@@ -162,12 +144,12 @@ Pull requests are welcome! Please fork the repo, improve, and submit a PR. For m
 
 ## 📄 License
 
-MIT License © [Khairy](https://github.com/mohamd-khair)
+MIT License © [Khairy](https://github.com/mohamd-khairy)
 
 ---
 
 ## 🌐 Links
 - GitHub: [github.com/mohamd-khairy/migration-model-sync](https://github.com/mohamd-khairy/migration-model-sync)
 - Packagist: [packagist.org/packages/khairy/migration-model-sync](https://packagist.org/packages/khairy/migration-model-sync)
-# migration-model-sync
+
 
