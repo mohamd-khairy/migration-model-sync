@@ -3,6 +3,8 @@
 namespace Khairy\MigrationModelSync;
 
 use Illuminate\Support\ServiceProvider;
+use Khairy\MigrationModelSync\Commands\ModelSyncAllToMigrationCommand;
+use Khairy\MigrationModelSync\Commands\ModelToMigrationCommand;
 use Khairy\MigrationModelSync\Commands\SyncAllModelsCommand;
 use Khairy\MigrationModelSync\Commands\SyncModelCommand;
 
@@ -18,7 +20,9 @@ class MigrationModelSyncServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->commands([
                 SyncModelCommand::class,
-                SyncAllModelsCommand::class, 
+                SyncAllModelsCommand::class,
+                ModelToMigrationCommand::class,
+                ModelSyncAllToMigrationCommand::class,
             ]);
 
             $this->publishes([

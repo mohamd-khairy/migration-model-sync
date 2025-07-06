@@ -14,7 +14,8 @@
 - 🗃 Supports both Laravel default and custom migration styles
 - 📁 Easily configurable via `config/modelsync.php`
 - ✨ **Sync all models**: A new `model:sync-all` command to synchronize all models from available migration files.
-
+- 🛠  **Generate migrations from models**: `model:generate-migration User` — creates a migration file for a specific model
+- 🛠  **Generate migrations from models**: `model:generate-migrations` — auto-generates all migration files from models (with dependency-aware sorting)
 ---
 
 ## 📦 Installation
@@ -78,6 +79,32 @@ This command will:
 - Iterate through all migration files that create tables
 - Parse each migration to extract schema information
 - Generate or update the corresponding Eloquent model with `$fillable`, `$casts`, and inferred `belongsTo` relationships.
+
+### Generate migration file from model class
+```bash
+php artisan model:generate-migration User
+```
+This command will:
+- Read `app/Models/User.php`
+- Extract `$fillable`, `$casts`, and any `belongsTo()` relationships
+- Infer column types `(string, timestamp, json, etc.)`
+- Generate a `create_users_table.php` migration in `database/migrations`
+- Include `foreignId()->constrained()->on(...)` if `belongsTo()` is present
+- Automatically add `timestamps` and `soft deletes` if applicable
+
+
+### Generate migration files from model classs
+```bash
+php artisan model:generate-migrations
+```
+This command will:
+- Loop through all model classes in app/Models/
+- Read their `$fillable`, `$casts`, and `belongsTo()` methods
+- Generate new `create_*_table.php` migration files
+- Sort migrations by relationship dependency (by default)
+- Automatically set timestamps to maintain migration order
+- Use options like `--only=User,Post` , `--except=Log` , `--sort=none` , and `--force` for advanced control.
+
 
 ### Example Migration
 ```php
